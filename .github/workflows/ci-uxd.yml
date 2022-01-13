@@ -20,6 +20,7 @@ env:
   runner_wallet_path: "/home/runner/.config/solana/id.json"
   mango_account_mm: "8fbL4156uoVYYyY9cvA6hVBBTdui9356tdKmFbkC6t6w"
   NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+  DEVNET_FAUCET: "9B5XszUGdMaxCZ7uSQhPzdks5ZQSmWxrmzCSvtJ6Ns6g"
 
 jobs:
   build:
@@ -141,3 +142,8 @@ jobs:
           chmod +x ./scripts/reset_program_id.sh
           ./scripts/reset_program_id.sh
           npx @project-serum/anchor-cli@${{ env.anchor_version }} test --skip-local-validator
+
+      - name: Wrap up uninstalling program and returning sols to the faucet
+        run: |
+          solana program close $(solana-keygen pubkey ./target/deploy/uxd-keypair.json)
+          solana transfer ${{ env.DEVNET_FAUCET }} $(solana balance)
