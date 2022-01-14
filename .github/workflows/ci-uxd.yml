@@ -149,3 +149,4 @@ jobs:
         run: |
           solana program close $(solana-keygen pubkey ./target/deploy/uxd-keypair.json)
           solana config set -k ${{ runner_wallet_path }}
+          solana transfer ${{ env.DEVNET_FAUCET }} $(solana balance --lamports | awk '{print $1;}')
