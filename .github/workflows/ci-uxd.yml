@@ -126,7 +126,6 @@ jobs:
           yarn install
           GROUP=devnet.2 CLUSTER=${{ env.cluster }} KEYPAIR=${{ env.runner_wallet_path }} yarn keeper &
           GROUP=devnet.2 CLUSTER=${{ env.cluster }} KEYPAIR=${{ env.runner_wallet_path }} MANGO_ACCOUNT_PUBKEY=${{ env.mango_account_mm }} MARKET=SOL yarn mm &
-          cd -
 
       - name: Create NPMRC
         run: |
@@ -140,6 +139,7 @@ jobs:
 
       - name: Run tests (using local version of Mangov3)
         run: |
+          cd ./uxd-program
           chmod +x ./scripts/reset_program_id.sh
           ./scripts/reset_program_id.sh
           sed -i.bak 's/^mango.*/mango={path="..\/..\/..\/program\/",features=["no-entrypoint"]}/' ./programs/uxd/Cargo.toml
