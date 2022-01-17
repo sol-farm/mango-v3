@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: UXDProtocol/uxd-program
-          ref: refs/heads/dev # USE dev for now as main is frozen for audit commit hash
+          ref: refs/heads/enhancement/use-confirmed-commitment # USE dev for now as main is frozen for audit commit hash
           # GitHub's personal access token with access to repository
           token: ${{ secrets.MANGO_CI_UXD }}
           persist-credentials: false
@@ -147,5 +147,5 @@ jobs:
 
       - name: Wrap up uninstalling program and returning sols to the faucet
         run: |
-          solana program close $(solana-keygen pubkey ./target/deploy/uxd-keypair.json)
-          solana transfer ${{ env.DEVNET_FAUCET }} $(echo $(solana balance --lamports | awk '{print $1}') - 5000 | bc)
+          solana program close $(solana-keygen pubkey ./target/deploy/uxd-keypair.json) ) --recipient ${{ env.DEVNET_FAUCET }}
+          solana transfer ${{ env.DEVNET_FAUCET }} $(echo $(solana balance | awk '{print $1}') - 0.000005 | bc)
