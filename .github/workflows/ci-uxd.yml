@@ -108,8 +108,12 @@ jobs:
           repository: blockworks-foundation/mango-client-v3
           path: ./mango-client-v3
 
-      - name: Fund test wallet with 8 sol for program deployment and running MM/Keeper (the test themselves are self funded)
+      - name: Fund test wallet with 12 sol for program deployment and running MM/Keeper (the test themselves are self funded)
         run: |
+          solana airdrop 1 -u d
+          solana airdrop 1 -u d
+          solana airdrop 1 -u d
+          solana airdrop 1 -u d
           solana airdrop 1 -u d
           solana airdrop 1 -u d
           solana airdrop 1 -u d
