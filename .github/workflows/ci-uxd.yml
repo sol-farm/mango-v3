@@ -48,6 +48,7 @@ jobs:
           node-version: "14"
           cache: "yarn"
           registry-url: 'https://npm.pkg.github.com'
+          cache-dependency-path: ./uxd-program/yarn.lock
           scope: "@UXDProtocol"
           always-auth: true
           
@@ -79,9 +80,9 @@ jobs:
         id: cache-programs
         with:
           path: |
-            ./target/debug
-            ./target/release
-            ./target/bpfel-unknown-unknown
+            ./uxd-program/target/debug
+            ./uxd-program/target/release
+            ./uxd-program/target/bpfel-unknown-unknown
           key: solana-${{ runner.os }}-v0000-${{ hashFiles('**/programs/**/*.rs') }}-${{ hashFiles('**/programs/**/*.toml') }}
 
       - uses: actions-rs/toolchain@v1
@@ -107,7 +108,7 @@ jobs:
         run: |
           solana-keygen new -o ${{ env.RUNNER_WALLET_PATH }}
           solana balance
-          solana transfer --keypair ./scripts/bank-keypair.json $(solana-keygen pubkey ${{ env.RUNNER_WALLET_PATH }}) ${{ env.DEPLOYMENT_FUNDING_AMOUNT }} --allow-unfunded-recipient
+          solana transfer --keypair ./uxd-program/scripts/bank-keypair.json $(solana-keygen pubkey ${{ env.RUNNER_WALLET_PATH }}) ${{ env.DEPLOYMENT_FUNDING_AMOUNT }} --allow-unfunded-recipient
           solana balance
           
       - name: Checkout MangoClient-v3
@@ -147,8 +148,7 @@ jobs:
 
       - name: Run tests (using local version of Mangov3)
         run: |
-          cd ./uxd-program
-          ./scripts/reset_program_id.sh
+          ./uxd-program/scripts/reset_program_id.sh
           sed -i.bak 's/^mango.*/mango={path="..\/..\/..\/program\/",features=["no-entrypoint"]}/' ./programs/uxd/Cargo.toml
           npx @project-serum/anchor-cli@${{ env.anchor_version }} test --skip-local-validator
 
