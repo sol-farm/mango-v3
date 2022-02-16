@@ -31,6 +31,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
+      - uses: actions/checkout@v2
           
       - name: Checkout @UXDProtocol/UXD-Program, install dependencies
         uses: actions/checkout@v2
@@ -115,11 +117,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: blockworks-foundation/mango-client-v3
-          path: /home/runner/work/uxd-program/uxd-program/third-party-dependencies/mango-client-v3
+          path: ./mango-client-v3
 
       - name: Install MangoClient-v3 dependencies then runs Mango Keeper and MM bot on devnet for SOL perp
         run: |
-          cd /home/runner/work/uxd-program/uxd-program/third-party-dependencies/mango-client-v3
+          cd ./mango-client-v3
           yarn install
           GROUP=devnet.2 CLUSTER=${{ env.CLUSTER }} KEYPAIR=${{ env.RUNNER_WALLET_PATH }} yarn keeper &
           GROUP=devnet.2 CLUSTER=${{ env.CLUSTER }} KEYPAIR=${{ env.RUNNER_WALLET_PATH }} MANGO_ACCOUNT_PUBKEY=${{ env.MANGO_ACCOUNT_MM_SOL }} MARKET=SOL yarn mm &
