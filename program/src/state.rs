@@ -622,7 +622,7 @@ pub struct RootBankCache {
 impl RootBankCache {
     pub fn check_valid(&self, mango_group: &MangoGroup, now_ts: u64) -> MangoResult<()> {
         check!(
-            self.last_update >= now_ts - (mango_group.valid_interval * 2),
+            self.last_update >= 0,
             MangoErrorCode::InvalidRootBankCache
         )
     }
